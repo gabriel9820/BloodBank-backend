@@ -6,7 +6,8 @@ namespace BloodBank.Core.Entities;
 
 public class Donor(
     string fullName,
-    string email,
+    CellPhoneNumber cellPhoneNumber,
+    Email email,
     DateOnly birthDate,
     Gender gender,
     decimal weight,
@@ -15,7 +16,8 @@ public class Donor(
     Address address) : BaseEntity
 {
     public string FullName { get; private set; } = fullName;
-    public string Email { get; private set; } = email;
+    public CellPhoneNumber CellPhoneNumber { get; private set; } = cellPhoneNumber;
+    public Email Email { get; private set; } = email;
     public DateOnly BirthDate { get; private set; } = birthDate;
     public Gender Gender { get; private set; } = gender;
     public decimal Weight { get; private set; } = weight;
@@ -28,7 +30,8 @@ public class Donor(
 
     public void Update(
         string fullName,
-        string email,
+        CellPhoneNumber cellPhoneNumber,
+        Email email,
         DateOnly birthDate,
         Gender gender,
         decimal weight,
@@ -37,6 +40,7 @@ public class Donor(
         Address address)
     {
         FullName = fullName;
+        CellPhoneNumber = cellPhoneNumber;
         Email = email;
         BirthDate = birthDate;
         Gender = gender;
