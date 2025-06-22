@@ -29,9 +29,4 @@ public class User(
         Role = role;
         IsActive = isActive;
     }
-
-    public bool CheckPassword(string passwordHash)
-    {
-        return PasswordHash == passwordHash;
-    }
 }

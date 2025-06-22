@@ -1,5 +1,6 @@
 using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BloodBank.Infrastructure.Persistence.Repositories;
 
@@ -11,5 +12,15 @@ public class UserRepository(
     public async Task AddAsync(User user)
     {
         await _dbContext.Users.AddAsync(user);
+    }
+
+    public async Task<bool> IsCellPhoneNumberInUseAsync(string cellPhoneNumber)
+    {
+        return await _dbContext.Users.AnyAsync(u => u.CellPhoneNumber.Value == cellPhoneNumber);
+    }
+
+    public async Task<bool> IsEmailInUseAsync(string email)
+    {
+        return await _dbContext.Users.AnyAsync(u => u.Email.Value == email);
     }
 }

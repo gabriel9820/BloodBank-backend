@@ -1,11 +1,16 @@
+using BloodBank.Application.Commands.Register;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodBank.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(
+    IMediator mediator) : ControllerBase
 {
+    private readonly IMediator _mediator = mediator;
+
     [HttpPost("login")]
     public async Task<IActionResult> Login()
     {
@@ -13,8 +18,15 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register()
+    public async Task<IActionResult> Register(RegisterCommand command)
     {
-        return Ok();
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return Created();
     }
 }

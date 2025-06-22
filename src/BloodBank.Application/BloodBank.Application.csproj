@@ -18,11 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands/" />
     <Folder Include="DTOs/" />
     <Folder Include="Queries/" />
-    <Folder Include="Results/" />
-    <Folder Include="Validators/" />
   </ItemGroup>
 
 </Project>

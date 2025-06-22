@@ -22,4 +22,7 @@ public partial class CellPhoneNumber
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value;
+
+    public static bool IsValid(string value)
+        => !string.IsNullOrWhiteSpace(value) && CellPhoneNumberRegex().IsMatch(value);
 }

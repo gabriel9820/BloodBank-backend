@@ -22,4 +22,7 @@ public partial class LandlineNumber
     public override int GetHashCode() => Value.GetHashCode();
 
     public override string ToString() => Value;
+
+    public static bool IsValid(string value)
+        => !string.IsNullOrWhiteSpace(value) && LandlineNumberRegex().IsMatch(value);
 }
