@@ -1,4 +1,5 @@
 using BloodBank.Core.Enums;
+using BloodBank.Core.Exceptions;
 
 namespace BloodBank.Core.Entities;
 
@@ -16,7 +17,7 @@ public class Stock(
     public void AddToStock(int quantityML)
     {
         if (quantityML <= 0)
-            throw new ArgumentException("A quantidade a ser adicionada deve ser maior que zero.");
+            throw new InvalidStockQuantityException();
 
         QuantityML += quantityML;
     }
@@ -24,10 +25,10 @@ public class Stock(
     public void RemoveFromStock(int quantityML)
     {
         if (quantityML <= 0)
-            throw new ArgumentException("A quantidade a ser removida deve ser maior que zero.");
+            throw new InvalidStockQuantityException();
 
         if (quantityML > QuantityML)
-            throw new ArgumentException("Estoque insuficiente para remover a quantidade solicitada.");
+            throw new InsufficientStockException();
 
         QuantityML -= quantityML;
     }

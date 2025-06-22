@@ -1,4 +1,5 @@
 using BloodBank.Core.Constants;
+using BloodBank.Core.Exceptions;
 
 namespace BloodBank.Core.Entities;
 
@@ -19,7 +20,7 @@ public class Donation(
     private static int ValidateQuantity(int quantityML)
     {
         if (quantityML < DonationRules.MIN_DONATION_QUANTITY_ML || quantityML > DonationRules.MAX_DONATION_QUANTITY_ML)
-            throw new ArgumentException(DonationRules.DONATION_QUANTITY_OUT_OF_RANGE_MESSAGE);
+            throw new DonationQuantityOutOfRangeException();
 
         return quantityML;
     }
