@@ -54,7 +54,7 @@ public class Donor(
 
     public bool CanDonate(DateTime? lastDonationDate)
     {
-        if ((DateTime.Now.Year - BirthDate.Year) < DonationRules.MIN_DONOR_AGE)
+        if ((DateTime.UtcNow.Year - BirthDate.Year) < DonationRules.MIN_DONOR_AGE)
             return false;
 
         if (Weight < DonationRules.MIN_DONOR_WEIGHT_KG)
@@ -66,7 +66,7 @@ public class Donor(
                 ? DonationRules.MIN_INTERVAL_BETWEEN_DONATIONS_DAYS_FEMALE
                 : DonationRules.MIN_INTERVAL_BETWEEN_DONATIONS_DAYS_MALE;
 
-            if ((DateTime.Now - lastDonationDate.Value.Date).TotalDays < minInterval)
+            if ((DateTime.UtcNow - lastDonationDate.Value.Date).TotalDays < minInterval)
                 return false;
         }
 
