@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using BloodBank.Core.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -35,16 +36,21 @@ public class AuthService(
             issuer: issuer,
             audience: audience,
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    public string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+    }
+
     public string HashPassword(string password)
     {
-        return _passwordHasher.HashPassword(null!, password); ;
+        return _passwordHasher.HashPassword(null!, password);
     }
 
     public bool VerifyPassword(string password, string hashedPassword)

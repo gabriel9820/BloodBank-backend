@@ -14,6 +14,11 @@ public class UserRepository(
         await _dbContext.Users.AddAsync(user);
     }
 
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email.Value == email);
+    }
+
     public async Task<bool> IsCellPhoneNumberInUseAsync(string cellPhoneNumber)
     {
         return await _dbContext.Users.AnyAsync(u => u.CellPhoneNumber.Value == cellPhoneNumber);

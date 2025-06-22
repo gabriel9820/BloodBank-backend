@@ -20,7 +20,7 @@ public static class ApiModule
             {
                 Title = "BloodBank API",
                 Version = "v1",
-                Description = "API para gerenciamento de um banco de sangue",
+                Description = "API para gerenciamento de bancos de sangue",
             });
         });
 
