@@ -1,12 +1,15 @@
-﻿using BloodBank.Core.Entities;
+﻿using System.Text;
+using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
 using BloodBank.Infrastructure.Auth;
 using BloodBank.Infrastructure.Persistence;
 using BloodBank.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BloodBank.Infrastructure;
 
@@ -41,6 +44,22 @@ public static class InfrastructureModule
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                };
+            });
 
         return services;
     }
