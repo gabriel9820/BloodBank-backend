@@ -28,6 +28,8 @@ public class Donor(
     /* Navigation Properties */
     public IEnumerable<Donation> Donations { get; private set; } = [];
 
+    protected Donor() : this(default!, default!, default!, default, default, default, default, default, default!) { }
+
     public void Update(
         string fullName,
         CellPhoneNumber cellPhoneNumber,

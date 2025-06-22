@@ -11,6 +11,8 @@ public class Stock(
     public RhFactor RhFactor { get; private set; } = rhFactor;
     public int QuantityML { get; private set; } = quantityML;
 
+    protected Stock() : this(default, default, default) { }
+
     public void AddToStock(int quantityML)
     {
         if (quantityML <= 0)

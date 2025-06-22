@@ -16,6 +16,8 @@ public class User(
     public string Role { get; private set; } = role;
     public bool IsActive { get; private set; } = true;
 
+    protected User() : this(default!, default!, default!, default!, default!) { }
+
     public void Update(
         string fullName,
         CellPhoneNumber cellPhoneNumber,

@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddApi()
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

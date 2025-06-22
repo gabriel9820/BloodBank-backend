@@ -14,6 +14,8 @@ public class Donation(
     public Donor Donor { get; private set; } = donor;
     public int DonorId { get; private set; } = donor.Id;
 
+    protected Donation() : this(default, default, default!) { }
+
     private static int ValidateQuantity(int quantityML)
     {
         if (quantityML < DonationRules.MIN_DONATION_QUANTITY_ML || quantityML > DonationRules.MAX_DONATION_QUANTITY_ML)
