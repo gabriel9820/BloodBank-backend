@@ -1,3 +1,4 @@
+using BloodBank.API.Middlewares;
 using Microsoft.OpenApi.Models;
 
 namespace BloodBank.API;
@@ -7,7 +8,16 @@ public static class ApiModule
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
         services
-            .AddSwagger();
+            .AddSwagger()
+            .AddExceptionHandler();
+
+        return services;
+    }
+
+    private static IServiceCollection AddExceptionHandler(this IServiceCollection services)
+    {
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
 
         return services;
     }
