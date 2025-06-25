@@ -59,6 +59,19 @@ public static class InfrastructureModule
                     ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("X-Access-Token"))
+                        {
+                            context.Token = context.Request.Cookies["X-Access-Token"];
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         return services;
