@@ -1,4 +1,4 @@
-namespace BloodBank.Application.DTOs;
+namespace BloodBank.Application.DTOs.ViewModels;
 
 public class LoginViewModel(string accessToken, string refreshToken)
 {

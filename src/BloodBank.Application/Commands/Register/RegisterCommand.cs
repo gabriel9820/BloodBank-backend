@@ -19,10 +19,11 @@ public static class RegisterCommandExtensions
     public static User ToEntity(this RegisterCommand command, string passwordHash)
     {
         return new User(
-            command.FullName,
-            new CellPhoneNumber(command.CellPhoneNumber),
-            new Email(command.Email),
-            passwordHash,
-            command.Role);
+            fullName: command.FullName,
+            cellPhoneNumber: new CellPhoneNumber(command.CellPhoneNumber),
+            email: new Email(command.Email),
+            passwordHash: passwordHash,
+            role: command.Role
+        );
     }
 }

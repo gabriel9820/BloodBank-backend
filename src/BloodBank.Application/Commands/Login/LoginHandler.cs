@@ -1,4 +1,4 @@
-using BloodBank.Application.DTOs;
+using BloodBank.Application.DTOs.ViewModels;
 using BloodBank.Application.Results;
 using BloodBank.Core.Repositories;
 using BloodBank.Infrastructure.Auth;
