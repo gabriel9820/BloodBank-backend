@@ -1,4 +1,5 @@
 using BloodBank.Application.Commands.AddDonor;
+using BloodBank.Application.Commands.DeleteDonor;
 using BloodBank.Application.Queries.GetAllDonors;
 using BloodBank.Application.Queries.GetDonorById;
 using MediatR;
@@ -14,19 +15,6 @@ public class DonorsController(
     IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
-
-    [HttpPost]
-    public async Task<IActionResult> Add(AddDonorCommand command)
-    {
-        var result = await _mediator.Send(command);
-
-        if (!result.IsSuccess)
-        {
-            return StatusCode(result.Error.Code, result.Error.Message);
-        }
-
-        return CreatedAtAction(nameof(GetById), new { id = result.Data }, command);
-    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllDonorsQuery query)
@@ -52,5 +40,31 @@ public class DonorsController(
         }
 
         return Ok(result.Data);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Add(AddDonorCommand command)
+    {
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return CreatedAtAction(nameof(GetById), new { id = result.Data }, command);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _mediator.Send(new DeleteDonorCommand(id));
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return NoContent();
     }
 }

@@ -16,7 +16,7 @@ public class DonorRepository(
         await _dbContext.Donors.AddAsync(donor);
     }
 
-    public void DeleteAsync(Donor donor)
+    public void Delete(Donor donor)
     {
         _dbContext.Donors.Remove(donor);
     }

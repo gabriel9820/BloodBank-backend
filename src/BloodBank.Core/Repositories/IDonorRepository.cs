@@ -6,7 +6,7 @@ namespace BloodBank.Core.Repositories;
 public interface IDonorRepository
 {
     Task AddAsync(Donor donor);
-    void DeleteAsync(Donor donor);
+    void Delete(Donor donor);
     Task<PagedResult<Donor>> GetAllAsync(DonorPagedRequest request);
     Task<Donor?> GetByIdAsync(int id);
     Task<bool> IsCellPhoneNumberInUseAsync(string cellPhoneNumber);
