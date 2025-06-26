@@ -1,5 +1,7 @@
 using BloodBank.Core.Entities;
+using BloodBank.Core.Models;
 using BloodBank.Core.Repositories;
+using BloodBank.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodBank.Infrastructure.Persistence.Repositories;
@@ -19,9 +21,16 @@ public class DonorRepository(
         _dbContext.Donors.Remove(donor);
     }
 
-    public async Task<IEnumerable<Donor>> GetAllAsync()
+    public async Task<PagedResult<Donor>> GetAllAsync(DonorPagedRequest request)
     {
-        return await _dbContext.Donors.ToListAsync();
+        var query = _dbContext.Donors.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(request.FullName))
+            query = query.Where(d => EF.Functions.ILike(d.FullName, $"%{request.FullName}%"));
+
+        query = query.OrderBy(d => d.FullName);
+
+        return await query.ToPagedResultAsync(request.PageNumber, request.PageSize);
     }
 
     public async Task<Donor?> GetByIdAsync(int id)

@@ -36,6 +36,7 @@ public static class InfrastructureModule
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IDonorRepository, DonorRepository>();
 
         return services;
     }

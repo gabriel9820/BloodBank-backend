@@ -27,7 +27,7 @@ public class DonorDetailsViewModel(
     public AddressViewModel Address { get; private set; } = address;
 }
 
-public static class DonorExtensions
+public static partial class DonorExtensions
 {
     public static DonorDetailsViewModel ToDetailsViewModel(this Donor donor)
     {
