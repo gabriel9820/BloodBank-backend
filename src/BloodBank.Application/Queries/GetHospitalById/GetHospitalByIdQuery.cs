@@ -2,9 +2,9 @@ using BloodBank.Application.DTOs.ViewModels;
 using BloodBank.Application.Results;
 using MediatR;
 
-namespace BloodBank.Application.Queries.GetDonorById;
+namespace BloodBank.Application.Queries.GetHospitalById;
 
-public class GetDonorByIdQuery(int id) : IRequest<Result<DonorDetailsViewModel>>
+public class GetHospitalByIdQuery(int id) : IRequest<Result<HospitalDetailsViewModel>>
 {
     public int Id { get; private set; } = id;
 }
