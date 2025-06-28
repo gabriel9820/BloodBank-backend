@@ -38,9 +38,11 @@ public class StockTests
             10
         );
 
-        // Act & Assert
+        // Act
         Action act = () => stock.AddToStock(quantityToAdd);
-        act.Should().Throw<InvalidStockQuantityException>();
+
+        // Assert
+        act.Should().Throw<InvalidQuantityException>();
     }
 
     [Theory]
@@ -75,9 +77,11 @@ public class StockTests
             10
         );
 
-        // Act & Assert
+        // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
-        act.Should().Throw<InvalidStockQuantityException>();
+
+        // Assert
+        act.Should().Throw<InvalidQuantityException>();
     }
 
     [Theory]
@@ -92,8 +96,10 @@ public class StockTests
             10
         );
 
-        // Act & Assert
+        // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
+
+        // Assert
         act.Should().Throw<InsufficientStockException>();
     }
 }

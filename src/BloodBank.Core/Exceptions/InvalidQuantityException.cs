@@ -1,7 +1,7 @@
 namespace BloodBank.Core.Exceptions;
 
-public class InvalidStockQuantityException : Exception
+public class InvalidQuantityException : Exception
 {
-    public InvalidStockQuantityException()
+    public InvalidQuantityException()
         : base("A quantidade deve ser maior que zero.") { }
 }

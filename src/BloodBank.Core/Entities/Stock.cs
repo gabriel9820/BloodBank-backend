@@ -17,7 +17,7 @@ public class Stock(
     public void AddToStock(int quantityML)
     {
         if (quantityML <= 0)
-            throw new InvalidStockQuantityException();
+            throw new InvalidQuantityException();
 
         QuantityML += quantityML;
     }
@@ -25,7 +25,7 @@ public class Stock(
     public void RemoveFromStock(int quantityML)
     {
         if (quantityML <= 0)
-            throw new InvalidStockQuantityException();
+            throw new InvalidQuantityException();
 
         if (quantityML > QuantityML)
             throw new InsufficientStockException();
