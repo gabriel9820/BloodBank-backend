@@ -11,7 +11,7 @@ public partial class LandlineNumber
 
     public LandlineNumber(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || !LandlineNumberRegex().IsMatch(value))
+        if (!IsValid(value))
             throw new ArgumentException("Número de telefone fixo inválido. Formato esperado: (XX) XXXX-XXXX");
 
         Value = value;

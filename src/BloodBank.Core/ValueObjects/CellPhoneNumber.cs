@@ -11,7 +11,7 @@ public partial class CellPhoneNumber
 
     public CellPhoneNumber(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || !CellPhoneNumberRegex().IsMatch(value))
+        if (!IsValid(value))
             throw new ArgumentException("Número de celular inválido. Formato esperado: (XX) 9XXXX-XXXX");
 
         Value = value;
