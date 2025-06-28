@@ -8,7 +8,7 @@ public class Donation(
     int quantityML,
     Donor donor) : BaseEntity
 {
-    public DateTime DonationDate { get; private set; } = donationDate;
+    public DateTime DonationDate { get; private set; } = ValidateDonationDate(donationDate);
     public int QuantityML { get; private set; } = ValidateQuantity(quantityML);
 
     /* Foreign Keys */
@@ -16,6 +16,14 @@ public class Donation(
     public int DonorId { get; private set; } = donor.Id;
 
     protected Donation() : this(default, default, default!) { }
+
+    private static DateTime ValidateDonationDate(DateTime donationDate)
+    {
+        if (donationDate > DateTime.UtcNow)
+            throw new FutureDateNotAllowedException();
+
+        return donationDate;
+    }
 
     private static int ValidateQuantity(int quantityML)
     {

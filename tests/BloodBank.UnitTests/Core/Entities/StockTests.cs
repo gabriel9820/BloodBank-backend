@@ -12,11 +12,7 @@ public class StockTests
     public void AddToStock_ShouldIncreaseQuantity_WhenValidQuantity(int quantityToAdd)
     {
         // Arrange
-        var stock = new Stock(
-            BloodType.O,
-            RhFactor.Negative,
-            10
-        );
+        var stock = CreateValidStock();
         int expectedQuantity = stock.QuantityML + quantityToAdd;
 
         // Act
@@ -32,11 +28,7 @@ public class StockTests
     public void AddToStock_ShouldThrowInvalidStockQuantityException_WhenInvalidQuantity(int quantityToAdd)
     {
         // Arrange
-        var stock = new Stock(
-            BloodType.O,
-            RhFactor.Negative,
-            10
-        );
+        var stock = CreateValidStock();
 
         // Act
         Action act = () => stock.AddToStock(quantityToAdd);
@@ -51,11 +43,7 @@ public class StockTests
     public void RemoveFromStock_ShouldDecreaseQuantity_WhenValidQuantity(int quantityToRemove)
     {
         // Arrange
-        var stock = new Stock(
-            BloodType.O,
-            RhFactor.Negative,
-            10
-        );
+        var stock = CreateValidStock();
         int expectedQuantity = stock.QuantityML - quantityToRemove;
 
         // Act
@@ -71,11 +59,7 @@ public class StockTests
     public void RemoveFromStock_ShouldThrowInvalidStockQuantityException_WhenInvalidQuantity(int quantityToRemove)
     {
         // Arrange
-        var stock = new Stock(
-            BloodType.O,
-            RhFactor.Negative,
-            10
-        );
+        var stock = CreateValidStock();
 
         // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
@@ -90,11 +74,7 @@ public class StockTests
     public void RemoveFromStock_ShouldThrowInsufficientStockException_WhenQuantityExceedsAvailable(int quantityToRemove)
     {
         // Arrange
-        var stock = new Stock(
-            BloodType.O,
-            RhFactor.Negative,
-            10
-        );
+        var stock = CreateValidStock();
 
         // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
@@ -102,4 +82,10 @@ public class StockTests
         // Assert
         act.Should().Throw<InsufficientStockException>();
     }
+
+    private static Stock CreateValidStock() => new(
+        BloodType.O,
+        RhFactor.Negative,
+        10
+    );
 }

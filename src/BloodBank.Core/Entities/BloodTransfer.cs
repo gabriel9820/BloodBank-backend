@@ -8,8 +8,7 @@ public class BloodTransfer(
     BloodType bloodType,
     RhFactor rhFactor,
     int quantityML,
-    Hospital hospital
-   ) : BaseEntity
+    Hospital hospital) : BaseEntity
 {
     public DateTime TransferDate { get; private set; } = ValidateTransferDate(transferDate);
     public BloodType BloodType { get; private set; } = bloodType;
