@@ -6,6 +6,33 @@ namespace BloodBank.UnitTests.Core.Entities;
 
 public class StockTests
 {
+    [Fact]
+    public void Constructor_ShouldInitializeProperties_WhenValidParameters()
+    {
+        // Arrange
+        var bloodType = BloodType.O;
+        var rhFactor = RhFactor.Negative;
+        int quantityML = 0;
+
+        // Act
+        var stock = new Stock(bloodType, rhFactor, quantityML);
+
+        // Assert
+        stock.BloodType.Should().Be(bloodType);
+        stock.RhFactor.Should().Be(rhFactor);
+        stock.QuantityML.Should().Be(quantityML);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowInvalidQuantityException_WhenNegativeQuantity()
+    {
+        // Act
+        Action act = () => new Stock(BloodType.O, RhFactor.Negative, -5);
+
+        // Assert
+        act.Should().Throw<InvalidQuantityException>();
+    }
+
     [Theory]
     [InlineData(5)]
     [InlineData(10)]

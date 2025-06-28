@@ -10,9 +10,17 @@ public class Stock(
 {
     public BloodType BloodType { get; private set; } = bloodType;
     public RhFactor RhFactor { get; private set; } = rhFactor;
-    public int QuantityML { get; private set; } = quantityML;
+    public int QuantityML { get; private set; } = ValidateInitialQuantity(quantityML);
 
     protected Stock() : this(default, default, default) { }
+
+    private static int ValidateInitialQuantity(int quantityML)
+    {
+        if (quantityML < 0)
+            throw new InvalidQuantityException();
+
+        return quantityML;
+    }
 
     public void AddToStock(int quantityML)
     {
