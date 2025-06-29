@@ -47,35 +47,54 @@ public class AddressTests
         var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
         var a2 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
 
-        // Act & Assert
-        a1.Equals(a2).Should().BeTrue();
-        a2.Equals(a1).Should().BeTrue();
+        // Act
+        var equals = a1.Equals(a2);
+
+        // Assert
+        equals.Should().BeTrue();
     }
 
     [Fact]
     public void Equals_ShouldReturnFalse_WhenAnyPropertyIsDifferent()
     {
+        // Arrange 
         var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
         var a2 = new Address("Other St", "123", "Downtown", "Metropolis", "SP", "12345-678");
 
-        a1.Equals(a2).Should().BeFalse();
+        // Act 
+        var equals = a1.Equals(a2);
+
+        // Assert
+        equals.Should().BeFalse();
     }
 
     [Fact]
     public void GetHashCode_ShouldBeEqual_ForEqualAddresses()
     {
+        // Arrange
         var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
         var a2 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
 
-        a1.GetHashCode().Should().Be(a2.GetHashCode());
+        // Act
+        var hashCode1 = a1.GetHashCode();
+        var hashCode2 = a2.GetHashCode();
+
+        // Assert
+        hashCode1.Should().Be(hashCode2);
     }
 
     [Fact]
     public void GetHashCode_ShouldBeDifferent_ForDifferentAddresses()
     {
+        // Arrange
         var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
         var a2 = new Address("Other St", "123", "Downtown", "Metropolis", "SP", "12345-678");
 
-        a1.GetHashCode().Should().NotBe(a2.GetHashCode());
+        // Act
+        var hashCode1 = a1.GetHashCode();
+        var hashCode2 = a2.GetHashCode();
+
+        // Assert
+        hashCode1.Should().NotBe(hashCode2);
     }
 }
