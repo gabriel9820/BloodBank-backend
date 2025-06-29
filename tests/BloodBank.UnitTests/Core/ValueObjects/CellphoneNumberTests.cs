@@ -35,47 +35,73 @@ public class CellPhoneNumberTests
     [Fact]
     public void Equals_ShouldReturnTrue_ForSameValue()
     {
+        // Arrange
         var a = new CellPhoneNumber("(54) 91234-5678");
         var b = new CellPhoneNumber("(54) 91234-5678");
 
-        a.Equals(b).Should().BeTrue();
-        b.Equals(a).Should().BeTrue();
+        // Act
+        var equals = a.Equals(b);
+
+        // Assert
+        equals.Should().BeTrue();
     }
 
     [Fact]
     public void Equals_ShouldReturnFalse_ForDifferentValue()
     {
+        // Arrange
         var a = new CellPhoneNumber("(54) 91234-5678");
         var b = new CellPhoneNumber("(11) 98765-4321");
 
-        a.Equals(b).Should().BeFalse();
+        // Act
+        var equals = a.Equals(b);
+
+        // Assert
+        equals.Should().BeFalse();
     }
 
     [Fact]
     public void GetHashCode_ShouldBeEqual_ForSameValue()
     {
+        // Arrange
         var a = new CellPhoneNumber("(54) 91234-5678");
         var b = new CellPhoneNumber("(54) 91234-5678");
 
-        a.GetHashCode().Should().Be(b.GetHashCode());
+        // Act
+        var hashCode1 = a.GetHashCode();
+        var hashCode2 = b.GetHashCode();
+
+        // Assert
+        hashCode1.Should().Be(hashCode2);
     }
 
     [Fact]
     public void GetHashCode_ShouldNotBeEqual_ForDifferentValue()
     {
+        // Arrange
         var a = new CellPhoneNumber("(54) 91234-5678");
         var b = new CellPhoneNumber("(11) 98765-4321");
 
-        a.GetHashCode().Should().NotBe(b.GetHashCode());
+        // Act
+        var hashCode1 = a.GetHashCode();
+        var hashCode2 = b.GetHashCode();
+
+        // Assert
+        hashCode1.Should().NotBe(hashCode2);
     }
 
     [Fact]
     public void ToString_ShouldReturnValue()
     {
+        // Arrange
         var value = "(54) 91234-5678";
         var cellPhoneNumber = new CellPhoneNumber(value);
 
-        cellPhoneNumber.ToString().Should().Be(value);
+        // Act
+        var result = cellPhoneNumber.ToString();
+
+        // Assert
+        result.Should().Be(value);
     }
 
     [Theory]
@@ -87,6 +113,10 @@ public class CellPhoneNumberTests
     [InlineData("(54) 81234-5678", false)]
     public void IsValid_ShouldReturnExpectedResult(string value, bool expected)
     {
-        CellPhoneNumber.IsValid(value!).Should().Be(expected);
+        // Act
+        var isValid = CellPhoneNumber.IsValid(value!);
+
+        // Assert
+        isValid.Should().Be(expected);
     }
 }
