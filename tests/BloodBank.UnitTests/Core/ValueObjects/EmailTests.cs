@@ -38,46 +38,72 @@ public class EmailTests
     [Fact]
     public void Equals_ShouldReturnTrue_ForSameValue()
     {
+        // Arrange
         var a = new Email("user@email.com");
         var b = new Email("user@email.com");
 
-        a.Equals(b).Should().BeTrue();
-        b.Equals(a).Should().BeTrue();
+        // Act
+        var equals = a.Equals(b);
+
+        // Assert
+        equals.Should().BeTrue();
     }
 
     [Fact]
     public void Equals_ShouldReturnFalse_ForDifferentValue()
     {
+        // Arrange
         var a = new Email("user@email.com");
         var b = new Email("other@email.com");
 
-        a.Equals(b).Should().BeFalse();
+        // Act
+        var equals = a.Equals(b);
+
+        // Assert
+        equals.Should().BeFalse();
     }
 
     [Fact]
     public void GetHashCode_ShouldBeEqual_ForSameValue()
     {
+        // Arrange
         var a = new Email("user@email.com");
         var b = new Email("user@email.com");
 
-        a.GetHashCode().Should().Be(b.GetHashCode());
+        // Act
+        var hashCodeA = a.GetHashCode();
+        var hashCodeB = b.GetHashCode();
+
+        // Assert
+        hashCodeA.Should().Be(hashCodeB);
     }
 
     [Fact]
     public void GetHashCode_ShouldNotBeEqual_ForDifferentValue()
     {
+        // Arrange
         var a = new Email("user@email.com");
         var b = new Email("other@email.com");
 
-        a.GetHashCode().Should().NotBe(b.GetHashCode());
+        // Act
+        var hashCodeA = a.GetHashCode();
+        var hashCodeB = b.GetHashCode();
+
+        // Assert
+        hashCodeA.Should().NotBe(hashCodeB);
     }
 
     [Fact]
     public void ToString_ShouldReturnValue()
     {
+        // Arrange
         var value = "user@email.com";
         var email = new Email(value);
 
-        email.ToString().Should().Be(value);
+        // Act
+        var result = email.ToString();
+
+        // Assert
+        result.Should().Be(value);
     }
 }
