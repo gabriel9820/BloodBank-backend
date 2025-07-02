@@ -13,7 +13,7 @@ public class LoginValidatorTests
     }
 
     [Fact]
-    public void LoginCommand_ShouldPass_WhenCommandIsValid()
+    public void LoginValidator_ShouldPass_WhenCommandIsValid()
     {
         // Arrange
         var command = new LoginCommand { Email = "user@email.com", Password = "123456" };
@@ -29,7 +29,7 @@ public class LoginValidatorTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("invalid-email")]
-    public void LoginCommand_ShouldFail_WhenEmailIsInvalid(string email)
+    public void LoginValidator_ShouldFail_WhenEmailIsInvalid(string email)
     {
         // Arrange
         var command = new LoginCommand { Email = email, Password = "123456" };
@@ -44,7 +44,7 @@ public class LoginValidatorTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void LoginCommand_ShouldFail_WhenPasswordIsInvalid(string password)
+    public void LoginValidator_ShouldFail_WhenPasswordIsInvalid(string password)
     {
         // Arrange
         var command = new LoginCommand { Email = "user@email.com", Password = password };
