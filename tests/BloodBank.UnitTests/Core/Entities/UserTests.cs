@@ -31,12 +31,7 @@ public class UserTests
     public void Update_ShouldModifyProperties_WhenValidParametersAreProvided()
     {
         // Arrange
-        var user = new User(
-            "Test User",
-            new CellPhoneNumber("(54) 91234-5678"),
-            new Email("testuser@example.com"),
-            "hashedpassword",
-            UserRoles.Admin);
+        var user = CreateValidUser();
 
         var updatedFullName = "Updated User";
         var updatedCellPhoneNumber = new CellPhoneNumber("(54) 98765-4321");
@@ -52,4 +47,38 @@ public class UserTests
         user.Role.Should().Be(updatedRole);
         user.IsActive.Should().Be(updatedIsActive);
     }
+
+    [Fact]
+    public void Activate_ShouldSetIsActiveToTrue()
+    {
+        // Arrange
+        var user = CreateValidUser();
+
+        // Act
+        user.Activate();
+
+        // Assert
+        user.IsActive.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Deactivate_ShouldSetIsActiveToFalse()
+    {
+        // Arrange
+        var user = CreateValidUser();
+
+        // Act
+        user.Deactivate();
+
+        // Assert
+        user.IsActive.Should().BeFalse();
+    }
+
+    private static User CreateValidUser() => new(
+        "Test User",
+        new CellPhoneNumber("(54) 91234-5678"),
+        new Email("testuser@example.com"),
+        "hashedpassword",
+        UserRoles.Admin
+    );
 }
