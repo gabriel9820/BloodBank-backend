@@ -12,7 +12,7 @@ public class HospitalTests
         // Arrange
         var name = "Test Hospital";
         var landlineNumber = new LandlineNumber("(54) 1234-5678");
-        var address = new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "98765-432");
+        var address = new AddressFaker().Generate();
 
         // Act
         var hospital = new Hospital(name, landlineNumber, address);
@@ -30,7 +30,7 @@ public class HospitalTests
         var hospital = new HospitalFaker().Generate();
         var updatedName = "Updated Hospital";
         var updatedLandlineNumber = new LandlineNumber("(54) 8765-4321");
-        var updatedAddress = new Address("Updated Street", "456", "Updated Neighborhood", "Updated City", "Updated State", "12345-678");
+        var updatedAddress = new AddressFaker().Generate();
 
         // Act
         hospital.Update(updatedName, updatedLandlineNumber, updatedAddress);

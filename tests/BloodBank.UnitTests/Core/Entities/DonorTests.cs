@@ -61,7 +61,7 @@ public class DonorTests
         var updatedWeight = 65;
         var updatedBloodType = BloodType.A;
         var updatedRhFactor = RhFactor.Negative;
-        var updatedAddress = new Address("Updated Street", "456", "Updated Neighborhood", "Updated City", "Updated State", "98765-432");
+        var updatedAddress = new AddressFaker().Generate();
 
         // Act
         donor.Update(
