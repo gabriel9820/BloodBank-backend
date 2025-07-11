@@ -1,8 +1,7 @@
 using BloodBank.Core.Constants;
 using BloodBank.Core.Entities;
-using BloodBank.Core.Enums;
 using BloodBank.Core.Exceptions;
-using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -19,7 +18,7 @@ public class DonationTests
     public void Constructor_ShouldInitializeProperties_WhenValidParametersAreProvided(DateTime donationDate, int quantity)
     {
         // Arrange
-        var donor = CreateValidDonor();
+        var donor = new DonorFaker().Generate();
 
         // Act
         var donation = new Donation(donationDate, quantity, donor);
@@ -35,7 +34,7 @@ public class DonationTests
     {
         // Arrange
         var futureDate = DateTime.UtcNow.AddDays(1);
-        var donor = CreateValidDonor();
+        var donor = new DonorFaker().Generate();
 
         // Act
         Action act = () => new Donation(futureDate, DonationRules.MIN_DONATION_QUANTITY_ML, donor);
@@ -52,7 +51,7 @@ public class DonationTests
     public void Constructor_ShouldThrowDonationQuantityOutOfRangeException_WhenQuantityIsOutOfRange(int quantity)
     {
         // Arrange
-        var donor = CreateValidDonor();
+        var donor = new DonorFaker().Generate();
 
         // Act
         Action act = () => new Donation(DateTime.UtcNow, quantity, donor);
@@ -60,16 +59,4 @@ public class DonationTests
         // Assert
         act.Should().Throw<DonationQuantityOutOfRangeException>();
     }
-
-    private static Donor CreateValidDonor() => new(
-        fullName: "Test Donor",
-        cellPhoneNumber: new CellPhoneNumber("(54) 91234-5678"),
-        email: new Email("donor@email.com"),
-        birthDate: new DateOnly(1990, 1, 1),
-        gender: Gender.Male,
-        weight: 50,
-        bloodType: BloodType.O,
-        rhFactor: RhFactor.Positive,
-        address: new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "12345-678")
-    );
 }

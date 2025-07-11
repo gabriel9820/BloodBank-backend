@@ -1,3 +1,4 @@
+using BloodBank.Core.Constants;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.ValueObjects;
@@ -12,9 +13,9 @@ public class DonorFaker : Faker<Donor>
             f.Name.FullName(),
             new CellPhoneNumber(f.Phone.PhoneNumber("(##) 9####-####")),
             new Email(f.Internet.Email()),
-            DateOnly.FromDateTime(f.Date.Past(20)),
+            DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE)),
             f.PickRandom<Gender>(),
-            f.Random.Decimal(50, 100),
+            f.Random.Decimal(DonationRules.MIN_DONOR_WEIGHT_KG, 100),
             f.PickRandom<BloodType>(),
             f.PickRandom<RhFactor>(),
             new AddressFaker().Generate()
