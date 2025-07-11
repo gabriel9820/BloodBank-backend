@@ -1,5 +1,5 @@
 using BloodBank.Application.Commands.Register;
-using BloodBank.Core.Constants;
+using BloodBank.UnitTests.Fakers;
 using FluentValidation.TestHelper;
 
 namespace BloodBank.UnitTests.Application.Commands.Register;
@@ -17,14 +17,7 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldPass_WhenCommandIsValid()
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker().Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -39,14 +32,9 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldFail_WhenFullNameIsInvalid(string fullName)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = fullName,
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker()
+            .RuleFor(c => c.FullName, fullName)
+            .Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -64,14 +52,9 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldFail_WhenCellPhoneNumberIsInvalid(string cellPhoneNumber)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = cellPhoneNumber,
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker()
+            .RuleFor(c => c.CellPhoneNumber, cellPhoneNumber)
+            .Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -90,14 +73,9 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldFail_WhenEmailIsInvalid(string email)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = email,
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker()
+            .RuleFor(c => c.Email, email)
+            .Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -113,14 +91,9 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldFail_WhenPasswordIsInvalid(string password)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = password,
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker()
+            .RuleFor(c => c.Password, password)
+            .Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -136,14 +109,9 @@ public class RegisterValidatorTests
     public void RegisterValidator_ShouldFail_WhenRoleIsInvalid(string role)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = role
-        };
+        var command = new RegisterCommandFaker()
+            .RuleFor(c => c.Role, role)
+            .Generate();
 
         // Act
         var result = _validator.TestValidate(command);

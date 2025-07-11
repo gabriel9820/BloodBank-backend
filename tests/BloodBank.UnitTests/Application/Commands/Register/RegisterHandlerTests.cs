@@ -1,9 +1,9 @@
 using BloodBank.Application.Commands.Register;
 using BloodBank.Application.Results;
-using BloodBank.Core.Constants;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
 using BloodBank.Infrastructure.Auth;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Application.Commands.Register;
 
@@ -26,14 +26,7 @@ public class RegisterHandlerTests
     public async Task Handle_ShouldRegisterUser_WhenDataIsValid()
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker().Generate();
         var passwordHash = "hashedPassword";
 
         _authServiceMock.Setup(a => a.HashPassword(command.Password)).Returns(passwordHash);
@@ -68,14 +61,7 @@ public class RegisterHandlerTests
     public async Task Handle_ShouldReturnError_WhenCellPhoneNumberOrEmailInUse(bool isEmailInUse, bool isCellPhoneNumberInUse)
     {
         // Arrange
-        var command = new RegisterCommand()
-        {
-            FullName = "Test User",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "user@email.com",
-            Password = "Teste@123",
-            Role = UserRoles.Admin
-        };
+        var command = new RegisterCommandFaker().Generate();
 
         _userRepositoryMock.Setup(ur => ur.IsEmailInUseAsync(command.Email)).ReturnsAsync(isEmailInUse);
         _userRepositoryMock.Setup(ur => ur.IsCellPhoneNumberInUseAsync(command.CellPhoneNumber)).ReturnsAsync(isCellPhoneNumberInUse);
