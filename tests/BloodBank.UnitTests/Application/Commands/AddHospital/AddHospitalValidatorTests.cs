@@ -1,5 +1,5 @@
 using BloodBank.Application.Commands.AddHospital;
-using BloodBank.Application.DTOs.InputModels;
+using BloodBank.UnitTests.Fakers;
 using FluentValidation.TestHelper;
 
 namespace BloodBank.UnitTests.Application.Commands.AddHospital;
@@ -17,7 +17,7 @@ public class AddHospitalValidatorTests
     public void AddHospitalValidator_ShouldPass_WhenCommandIsValid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddHospitalCommandFaker().Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -32,7 +32,7 @@ public class AddHospitalValidatorTests
     public void AddHospitalValidator_ShouldFail_WhenNameIsInvalid(string name)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddHospitalCommandFaker().Generate();
         command.Name = name;
 
         // Act
@@ -50,7 +50,7 @@ public class AddHospitalValidatorTests
     public void AddHospitalValidator_ShouldFail_WhenLandlineNumberIsInvalid(string landlineNumber)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddHospitalCommandFaker().Generate();
         command.LandlineNumber = landlineNumber;
 
         // Act
@@ -64,7 +64,7 @@ public class AddHospitalValidatorTests
     public void AddHospitalValidator_ShouldFail_WhenAddressIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddHospitalCommandFaker().Generate();
         command.Address = null!;
 
         // Act
@@ -72,25 +72,5 @@ public class AddHospitalValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(c => c.Address);
-    }
-
-    private static AddHospitalCommand CreateValidCommand()
-    {
-        var address = new AddressInputModel
-        {
-            Street = "Test Street",
-            Number = "123",
-            Neighborhood = "Test Neighborhood",
-            City = "Test City",
-            State = "TS",
-            ZipCode = "12345-768"
-        };
-
-        return new AddHospitalCommand
-        {
-            Name = "Test Hospital",
-            LandlineNumber = "(11) 1234-5678",
-            Address = address
-        };
     }
 }

@@ -3,6 +3,7 @@ using BloodBank.Application.DTOs.InputModels;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Application.Commands.AddHospital;
 
@@ -23,7 +24,7 @@ public class AddHospitalHandlerTests
     public async Task Handle_ShouldAddHospital_WhenCommandIsValid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddHospitalCommandFaker().Generate();
 
         _hospitalRepositoryMock.Setup(hr => hr.AddAsync(It.IsAny<Hospital>())).Returns(Task.CompletedTask);
         _uowMock.Setup(uow => uow.SaveChangesAsync()).ReturnsAsync(1);
@@ -40,25 +41,5 @@ public class AddHospitalHandlerTests
             h.Address.Equals(command.Address.ToValueObject())
         )), Times.Once);
         _uowMock.Verify(uow => uow.SaveChangesAsync(), Times.Once);
-    }
-
-    private static AddHospitalCommand CreateValidCommand()
-    {
-        var address = new AddressInputModel
-        {
-            Street = "Test Street",
-            Number = "123",
-            Neighborhood = "Test Neighborhood",
-            City = "Test City",
-            State = "TS",
-            ZipCode = "12345-768"
-        };
-
-        return new AddHospitalCommand
-        {
-            Name = "Test Hospital",
-            LandlineNumber = "(11) 1234-5678",
-            Address = address
-        };
     }
 }
