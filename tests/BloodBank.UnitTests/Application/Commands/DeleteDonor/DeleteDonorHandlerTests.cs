@@ -40,7 +40,7 @@ public class DeleteDonorHandlerTests
         result.IsSuccess.Should().BeTrue();
 
         _donorRepositoryMock.Verify(dr => dr.GetByIdAsync(donorId), Times.Once);
-        _donorRepositoryMock.Verify(dr => dr.Delete(expectedDonor), Times.Once);
+        _donorRepositoryMock.Verify(dr => dr.Delete(It.Is<Donor>(d => d.Id == donorId)), Times.Once);
         _unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(), Times.Once);
     }
 
