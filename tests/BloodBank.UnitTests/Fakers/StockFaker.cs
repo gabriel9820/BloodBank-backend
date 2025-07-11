@@ -5,7 +5,7 @@ namespace BloodBank.UnitTests.Fakers;
 
 public class StockFaker : Faker<Stock>
 {
-    public StockFaker()
+    public StockFaker() : base("pt_BR")
     {
         CustomInstantiator(f => new Stock(
             f.PickRandom<BloodType>(),

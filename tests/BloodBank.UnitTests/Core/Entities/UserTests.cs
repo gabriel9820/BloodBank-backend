@@ -1,6 +1,7 @@
 using BloodBank.Core.Constants;
 using BloodBank.Core.Entities;
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -31,7 +32,7 @@ public class UserTests
     public void Update_ShouldModifyProperties_WhenValidParametersAreProvided()
     {
         // Arrange
-        var user = CreateValidUser();
+        var user = new UserFaker().Generate();
 
         var updatedFullName = "Updated User";
         var updatedCellPhoneNumber = new CellPhoneNumber("(54) 98765-4321");
@@ -52,7 +53,7 @@ public class UserTests
     public void Activate_ShouldSetIsActiveToTrue()
     {
         // Arrange
-        var user = CreateValidUser();
+        var user = new UserFaker().Generate();
 
         // Act
         user.Activate();
@@ -65,7 +66,7 @@ public class UserTests
     public void Deactivate_ShouldSetIsActiveToFalse()
     {
         // Arrange
-        var user = CreateValidUser();
+        var user = new UserFaker().Generate();
 
         // Act
         user.Deactivate();
@@ -73,12 +74,4 @@ public class UserTests
         // Assert
         user.IsActive.Should().BeFalse();
     }
-
-    private static User CreateValidUser() => new(
-        "Test User",
-        new CellPhoneNumber("(54) 91234-5678"),
-        new Email("testuser@example.com"),
-        "hashedpassword",
-        UserRoles.Admin
-    );
 }
