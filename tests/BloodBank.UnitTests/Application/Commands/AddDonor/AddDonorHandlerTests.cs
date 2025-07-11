@@ -2,9 +2,9 @@ using BloodBank.Application.Commands.AddDonor;
 using BloodBank.Application.DTOs.InputModels;
 using BloodBank.Application.Results;
 using BloodBank.Core.Entities;
-using BloodBank.Core.Enums;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Application.Commands.AddDonor;
 
@@ -25,7 +25,7 @@ public class AddDonorHandlerTests
     public async Task Handle_ShouldAddDonor_WhenDataIsValid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
 
         _donorRepositoryMock.Setup(dr => dr.IsEmailInUseAsync(command.Email)).ReturnsAsync(false);
         _donorRepositoryMock.Setup(dr => dr.IsCellPhoneNumberInUseAsync(command.CellPhoneNumber)).ReturnsAsync(false);
@@ -58,7 +58,7 @@ public class AddDonorHandlerTests
     public async Task Handle_ShouldReturnError_WhenEmailIsInUse()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
 
         _donorRepositoryMock.Setup(dr => dr.IsEmailInUseAsync(command.Email)).ReturnsAsync(true);
 
@@ -79,7 +79,7 @@ public class AddDonorHandlerTests
     public async Task Handle_ShouldReturnError_WhenCellPhoneNumberIsInUse()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
 
         _donorRepositoryMock.Setup(dr => dr.IsEmailInUseAsync(command.Email)).ReturnsAsync(false);
         _donorRepositoryMock.Setup(dr => dr.IsCellPhoneNumberInUseAsync(command.CellPhoneNumber)).ReturnsAsync(true);
@@ -95,31 +95,5 @@ public class AddDonorHandlerTests
         _donorRepositoryMock.Verify(dr => dr.IsCellPhoneNumberInUseAsync(It.IsAny<string>()), Times.Once);
         _donorRepositoryMock.Verify(dr => dr.AddAsync(It.IsAny<Donor>()), Times.Never);
         _uowMock.Verify(uow => uow.SaveChangesAsync(), Times.Never);
-    }
-
-    private static AddDonorCommand CreateValidCommand()
-    {
-        var address = new AddressInputModel
-        {
-            Street = "Test Street",
-            Number = "123",
-            Neighborhood = "Test Neighborhood",
-            City = "Test City",
-            State = "TS",
-            ZipCode = "12345-678"
-        };
-
-        return new AddDonorCommand
-        {
-            FullName = "Test Donor",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "donor@email.com",
-            BirthDate = new DateOnly(1990, 1, 1),
-            Gender = Gender.Male,
-            Weight = 70,
-            BloodType = BloodType.O,
-            RhFactor = RhFactor.Positive,
-            Address = address
-        };
     }
 }

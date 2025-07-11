@@ -1,6 +1,6 @@
 using BloodBank.Application.Commands.AddDonor;
-using BloodBank.Application.DTOs.InputModels;
 using BloodBank.Core.Enums;
+using BloodBank.UnitTests.Fakers;
 using FluentValidation.TestHelper;
 
 namespace BloodBank.UnitTests.Application.Commands.AddDonor;
@@ -18,7 +18,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldPass_WhenCommandIsValid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -33,7 +33,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenFullNameIsInvalid(string fullName)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.FullName = fullName;
 
         // Act
@@ -52,7 +52,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenCellPhoneNumberIsInvalid(string cellPhoneNumber)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.CellPhoneNumber = cellPhoneNumber;
 
         // Act
@@ -72,7 +72,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenEmailIsInvalid(string email)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.Email = email;
 
         // Act
@@ -86,7 +86,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenBirthDateIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.BirthDate = default;
 
         // Act
@@ -100,7 +100,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenGenderIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.Gender = (Gender)999;
 
         // Act
@@ -116,7 +116,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenWeightIsInvalid(decimal weight)
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.Weight = weight;
 
         // Act
@@ -130,7 +130,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenBloodTypeIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.BloodType = (BloodType)999;
 
         // Act
@@ -144,7 +144,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenRhFactorIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.RhFactor = (RhFactor)999;
 
         // Act
@@ -158,7 +158,7 @@ public class AddDonorValidatorTests
     public void AddDonorValidator_ShouldFail_WhenAddressIsInvalid()
     {
         // Arrange
-        var command = CreateValidCommand();
+        var command = new AddDonorCommandFaker().Generate();
         command.Address = null!;
 
         // Act
@@ -166,31 +166,5 @@ public class AddDonorValidatorTests
 
         // Assert
         result.ShouldHaveValidationErrorFor(c => c.Address);
-    }
-
-    private static AddDonorCommand CreateValidCommand()
-    {
-        var address = new AddressInputModel
-        {
-            Street = "Test Street",
-            Number = "123",
-            Neighborhood = "Test Neighborhood",
-            City = "Test City",
-            State = "TS",
-            ZipCode = "12345-678"
-        };
-
-        return new AddDonorCommand
-        {
-            FullName = "Test Donor",
-            CellPhoneNumber = "(54) 91234-5678",
-            Email = "donor@email.com",
-            BirthDate = new DateOnly(1990, 1, 1),
-            Gender = Gender.Male,
-            Weight = 70,
-            BloodType = BloodType.O,
-            RhFactor = RhFactor.Positive,
-            Address = address
-        };
     }
 }
