@@ -1,6 +1,7 @@
 using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.Exceptions;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -39,7 +40,9 @@ public class StockTests
     public void AddToStock_ShouldIncreaseQuantity_WhenValidQuantity(int quantityToAdd)
     {
         // Arrange
-        var stock = CreateValidStock();
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 10)
+            .Generate();
         int expectedQuantity = stock.QuantityML + quantityToAdd;
 
         // Act
@@ -55,7 +58,9 @@ public class StockTests
     public void AddToStock_ShouldThrowInvalidStockQuantityException_WhenInvalidQuantity(int quantityToAdd)
     {
         // Arrange
-        var stock = CreateValidStock();
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 10)
+            .Generate();
 
         // Act
         Action act = () => stock.AddToStock(quantityToAdd);
@@ -70,7 +75,9 @@ public class StockTests
     public void RemoveFromStock_ShouldDecreaseQuantity_WhenValidQuantity(int quantityToRemove)
     {
         // Arrange
-        var stock = CreateValidStock();
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 10)
+            .Generate();
         int expectedQuantity = stock.QuantityML - quantityToRemove;
 
         // Act
@@ -86,7 +93,9 @@ public class StockTests
     public void RemoveFromStock_ShouldThrowInvalidStockQuantityException_WhenInvalidQuantity(int quantityToRemove)
     {
         // Arrange
-        var stock = CreateValidStock();
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 10)
+            .Generate();
 
         // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
@@ -101,7 +110,9 @@ public class StockTests
     public void RemoveFromStock_ShouldThrowInsufficientStockException_WhenQuantityExceedsAvailable(int quantityToRemove)
     {
         // Arrange
-        var stock = CreateValidStock();
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 10)
+            .Generate();
 
         // Act
         Action act = () => stock.RemoveFromStock(quantityToRemove);
@@ -109,10 +120,4 @@ public class StockTests
         // Assert
         act.Should().Throw<InsufficientStockException>();
     }
-
-    private static Stock CreateValidStock() => new(
-        BloodType.O,
-        RhFactor.Negative,
-        10
-    );
 }
