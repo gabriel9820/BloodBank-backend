@@ -6,11 +6,8 @@ public class AddHospitalCommandFaker : Faker<AddHospitalCommand>
 {
     public AddHospitalCommandFaker() : base("pt_BR")
     {
-        CustomInstantiator(f => new AddHospitalCommand
-        {
-            Name = f.Company.CompanyName(),
-            LandlineNumber = f.Phone.PhoneNumber("(##) ####-####"),
-            Address = new AddressInputModelFaker().Generate(),
-        });
+        RuleFor(c => c.Name, f => f.Company.CompanyName());
+        RuleFor(c => c.LandlineNumber, f => f.Phone.PhoneNumber("(##) ####-####"));
+        RuleFor(c => c.Address, new AddressInputModelFaker().Generate());
     }
 }
