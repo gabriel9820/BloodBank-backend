@@ -1,4 +1,5 @@
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.ValueObjects;
 
@@ -31,13 +32,13 @@ public class AddressTests
     public void ToString_ShouldReturnFormattedAddress()
     {
         // Arrange
-        var address = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
+        var address = new AddressFaker().Generate();
 
         // Act
         var result = address.ToString();
 
         // Assert
-        result.Should().Be("Main St, 123 - Downtown, Metropolis-SP, 12345-678");
+        result.Should().Be($"{address.Street}, {address.Number} - {address.Neighborhood}, {address.City}-{address.State}, {address.ZipCode}");
     }
 
     [Fact]
@@ -58,8 +59,8 @@ public class AddressTests
     public void Equals_ShouldReturnFalse_WhenAnyPropertyIsDifferent()
     {
         // Arrange 
-        var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
-        var a2 = new Address("Other St", "123", "Downtown", "Metropolis", "SP", "12345-678");
+        var a1 = new AddressFaker().Generate();
+        var a2 = new AddressFaker().Generate();
 
         // Act 
         var equals = a1.Equals(a2);
@@ -87,8 +88,8 @@ public class AddressTests
     public void GetHashCode_ShouldBeDifferent_ForDifferentAddresses()
     {
         // Arrange
-        var a1 = new Address("Main St", "123", "Downtown", "Metropolis", "SP", "12345-678");
-        var a2 = new Address("Other St", "123", "Downtown", "Metropolis", "SP", "12345-678");
+        var a1 = new AddressFaker().Generate();
+        var a2 = new AddressFaker().Generate();
 
         // Act
         var hashCode1 = a1.GetHashCode();
