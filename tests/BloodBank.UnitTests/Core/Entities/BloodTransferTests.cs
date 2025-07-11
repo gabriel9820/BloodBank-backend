@@ -1,7 +1,7 @@
 using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.Exceptions;
-using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -20,7 +20,7 @@ public class BloodTransferTests
         // Arrange
         var bloodType = BloodType.A;
         var rhFactor = RhFactor.Positive;
-        var hospital = CreateValidHospital();
+        var hospital = new HospitalFaker().Generate();
 
         // Act
         var bloodTransfer = new BloodTransfer(transferDate, bloodType, rhFactor, quantityML, hospital);
@@ -38,7 +38,7 @@ public class BloodTransferTests
     {
         // Arrange
         var futureDate = DateTime.UtcNow.AddDays(1);
-        var hospital = CreateValidHospital();
+        var hospital = new HospitalFaker().Generate();
 
         // Act
         Action act = () => new BloodTransfer(
@@ -59,7 +59,7 @@ public class BloodTransferTests
     public void Constructor_ShouldThrowInvalidQuantityException_WhenQuantityIsInvalid(int quantityML)
     {
         // Arrange
-        var hospital = CreateValidHospital();
+        var hospital = new HospitalFaker().Generate();
 
         // Act
         Action act = () => new BloodTransfer(
@@ -73,10 +73,4 @@ public class BloodTransferTests
         // Assert
         act.Should().Throw<InvalidQuantityException>();
     }
-
-    private static Hospital CreateValidHospital() => new(
-        "Test Hospital",
-        new LandlineNumber("(54) 1234-5678"),
-        new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "12345-678")
-    );
 }
