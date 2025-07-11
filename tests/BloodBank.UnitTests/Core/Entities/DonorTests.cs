@@ -2,6 +2,7 @@ using BloodBank.Core.Constants;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -10,27 +11,48 @@ public class DonorTests
     [Fact]
     public void Constructor_ShouldInitializeProperties_WhenValidParametersAreProvided()
     {
-        // Arrange & Act
-        var donor = CreateValidDonor();
+        // Arrange
+        var fullName = "Test Donor";
+        var cellPhoneNumber = new CellPhoneNumber("(54) 91234-5678");
+        var email = new Email("donor@email.com");
+        var birthDate = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE));
+        var gender = Gender.Male;
+        var weight = DonationRules.MIN_DONOR_WEIGHT_KG;
+        var bloodType = BloodType.O;
+        var rhFactor = RhFactor.Positive;
+        var address = new AddressFaker().Generate();
+
+        // Act
+        var donor = new Donor(
+            fullName,
+            cellPhoneNumber,
+            email,
+            birthDate,
+            gender,
+            weight,
+            bloodType,
+            rhFactor,
+            address
+        );
 
         // Assert
         donor.Should().NotBeNull();
-        donor.FullName.Should().Be("Test Donor");
-        donor.CellPhoneNumber.Should().Be(new CellPhoneNumber("(54) 91234-5678"));
-        donor.Email.Should().Be(new Email("donor@email.com"));
-        donor.BirthDate.Should().Be(DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE)));
-        donor.Gender.Should().Be(Gender.Male);
-        donor.Weight.Should().Be(DonationRules.MIN_DONOR_WEIGHT_KG);
-        donor.BloodType.Should().Be(BloodType.O);
-        donor.RhFactor.Should().Be(RhFactor.Positive);
-        donor.Address.Should().Be(new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "12345-678"));
+        donor.FullName.Should().Be(fullName);
+        donor.CellPhoneNumber.Should().Be(cellPhoneNumber);
+        donor.Email.Should().Be(email);
+        donor.BirthDate.Should().Be(birthDate);
+        donor.Gender.Should().Be(gender);
+        donor.Weight.Should().Be(weight);
+        donor.BloodType.Should().Be(bloodType);
+        donor.RhFactor.Should().Be(rhFactor);
+        donor.Address.Should().Be(address);
     }
 
     [Fact]
     public void Update_ShouldModifyProperties_WhenValidParametersAreProvided()
     {
         // Arrange
-        var donor = CreateValidDonor();
+        var donor = new DonorFaker().Generate();
         var updatedFullName = "Updated Donor";
         var updatedCellPhoneNumber = new CellPhoneNumber("(54) 98765-4321");
         var updatedEmail = new Email("updated@email.com");
@@ -66,12 +88,17 @@ public class DonorTests
         donor.Address.Should().Be(updatedAddress);
     }
 
-    [Fact]
-    public void CanDonate_ShouldReturnTrue_WhenDonorIsEligible()
+    [Theory]
+    [InlineData(Gender.Male, DonationRules.MIN_INTERVAL_BETWEEN_DONATIONS_DAYS_MALE)]
+    [InlineData(Gender.Female, DonationRules.MIN_INTERVAL_BETWEEN_DONATIONS_DAYS_FEMALE)]
+    public void CanDonate_ShouldReturnTrue_WhenDonorIsEligible(Gender gender, int minIntervalDays)
     {
         // Arrange
-        var donor = CreateValidDonor();
-        var lastDonationDate = DateTime.UtcNow.AddDays(-DonationRules.MIN_INTERVAL_BETWEEN_DONATIONS_DAYS_MALE);
+        var donor = new DonorFaker()
+            .RuleFor(d => d.Gender, gender)
+            .Generate();
+
+        var lastDonationDate = DateTime.UtcNow.AddDays(-minIntervalDays);
 
         // Act
         var canDonate = donor.CanDonate(lastDonationDate);
@@ -84,18 +111,9 @@ public class DonorTests
     public void CanDonate_ShouldReturnFalse_WhenDonorIsUnderage()
     {
         // Arrange
-        var birthDate = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE + 1));
-        var donor = new Donor(
-            "Underage Donor",
-            new CellPhoneNumber("(54) 91234-5678"),
-            new Email("underage.donor@email.com"),
-            birthDate,
-            Gender.Male,
-            DonationRules.MIN_DONOR_WEIGHT_KG,
-            BloodType.O,
-            RhFactor.Positive,
-            new Address("Underage Street", "123", "Underage Neighborhood", "Underage City", "Underage State", "12345-678")
-        );
+        var donor = new DonorFaker()
+            .RuleFor(d => d.BirthDate, f => DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE + 1)))
+            .Generate();
 
         // Act
         var canDonate = donor.CanDonate(null);
@@ -108,17 +126,9 @@ public class DonorTests
     public void CanDonate_ShouldReturnFalse_WhenDonorIsNotEligibleDueToWeight()
     {
         // Arrange
-        var donor = new Donor(
-            "Lightweight Donor",
-            new CellPhoneNumber("(54) 91234-5678"),
-            new Email("lightweight.donor@email.com"),
-            DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE)),
-            Gender.Male,
-            DonationRules.MIN_DONOR_WEIGHT_KG - 1,
-            BloodType.O,
-            RhFactor.Positive,
-            new Address("Lightweight Street", "123", "Lightweight Neighborhood", "Lightweight City", "Lightweight State", "12345-678")
-        );
+        var donor = new DonorFaker()
+            .RuleFor(d => d.Weight, f => f.Random.Int(1, DonationRules.MIN_DONOR_WEIGHT_KG - 1))
+            .Generate();
 
         // Act
         var canDonate = donor.CanDonate(null);
@@ -137,17 +147,9 @@ public class DonorTests
     public void CanDonate_ShouldReturnFalse_WhenDonorIsNotEligibleDueToLastDonationDate(DateTime lastDonationDate, Gender gender)
     {
         // Arrange
-        var donor = new Donor(
-            "Test Donor",
-            new CellPhoneNumber("(54) 91234-5678"),
-            new Email("donor@email.com"),
-            DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE)),
-            gender,
-            DonationRules.MIN_DONOR_WEIGHT_KG,
-            BloodType.O,
-            RhFactor.Positive,
-            new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "12345-678")
-        );
+        var donor = new DonorFaker()
+            .RuleFor(d => d.Gender, gender)
+            .Generate();
 
         // Act
         var canDonate = donor.CanDonate(lastDonationDate);
@@ -155,16 +157,4 @@ public class DonorTests
         // Assert
         canDonate.Should().BeFalse();
     }
-
-    private static Donor CreateValidDonor() => new(
-        "Test Donor",
-        new CellPhoneNumber("(54) 91234-5678"),
-        new Email("donor@email.com"),
-        DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-DonationRules.MIN_DONOR_AGE)),
-        Gender.Male,
-        DonationRules.MIN_DONOR_WEIGHT_KG,
-        BloodType.O,
-        RhFactor.Positive,
-        new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "12345-678")
-    );
 }
