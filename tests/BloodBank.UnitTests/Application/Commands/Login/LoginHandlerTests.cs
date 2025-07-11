@@ -1,10 +1,9 @@
 using BloodBank.Application.Commands.Login;
 using BloodBank.Application.Results;
-using BloodBank.Core.Constants;
-using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.ValueObjects;
 using BloodBank.Infrastructure.Auth;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Application.Commands.Login;
 
@@ -25,8 +24,11 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnTokens_WhenUserIsValid()
     {
         // Arrange
-        var command = new LoginCommand { Email = "user@email.com", Password = "Teste@123" };
-        var expectedUser = CreateValidUser(command.Email);
+        var command = new LoginCommandFaker().Generate();
+        var expectedUser = new UserFaker()
+            .RuleFor(u => u.Email, new Email(command.Email))
+            .RuleFor(u => u.PasswordHash, command.Password)
+            .Generate();
         var expectedAccessToken = "access-token";
         var expectedRefreshToken = "refresh-token";
 
@@ -54,7 +56,7 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnError_WhenUserNotFound()
     {
         // Arrange
-        var command = new LoginCommand { Email = "user@email.com", Password = "Teste@123" };
+        var command = new LoginCommandFaker().Generate();;
 
         _userRepositoryMock.Setup(ur => ur.GetByEmailAsync(command.Email)).ReturnsAsync(() => null);
 
@@ -75,8 +77,10 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnError_WhenUserIsNotActive()
     {
         // Arrange
-        var command = new LoginCommand { Email = "user@email.com", Password = "Teste@123" };
-        var expectedUser = CreateValidUser(command.Email);
+        var command = new LoginCommandFaker().Generate();;
+        var expectedUser = new UserFaker()
+            .RuleFor(u => u.Email, new Email(command.Email))
+            .Generate();
         expectedUser.Deactivate();
 
         _userRepositoryMock.Setup(ur => ur.GetByEmailAsync(command.Email)).ReturnsAsync(expectedUser);
@@ -98,8 +102,12 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnError_WhenPasswordIsIncorrect()
     {
         // Arrange
-        var command = new LoginCommand { Email = "user@email.com", Password = "Teste@123" };
-        var expectedUser = CreateValidUser(command.Email);
+        var command = new LoginCommandFaker()
+            .RuleFor(c => c.Password, "wrong-password")
+            .Generate();;
+        var expectedUser = new UserFaker()
+            .RuleFor(u => u.Email, new Email(command.Email))
+            .Generate();
 
         _userRepositoryMock.Setup(ur => ur.GetByEmailAsync(command.Email)).ReturnsAsync(expectedUser);
         _authServiceMock.Setup(a => a.VerifyPassword(command.Password, expectedUser.PasswordHash)).Returns(false);
@@ -116,12 +124,4 @@ public class LoginHandlerTests
         _authServiceMock.Verify(a => a.GenerateJwtToken(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         _authServiceMock.Verify(a => a.GenerateRefreshToken(), Times.Never);
     }
-
-    private static User CreateValidUser(string email) => new(
-        "Test User",
-        new CellPhoneNumber("(54) 91234-5678"),
-        new Email(email),
-        "hashedPassword",
-        UserRoles.Admin
-    );
 }
