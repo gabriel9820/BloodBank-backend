@@ -1,5 +1,6 @@
 using BloodBank.Core.Entities;
 using BloodBank.Core.ValueObjects;
+using BloodBank.UnitTests.Fakers;
 
 namespace BloodBank.UnitTests.Core.Entities;
 
@@ -26,21 +27,17 @@ public class HospitalTests
     public void Update_ShouldModifyProperties_WhenValidParametersAreProvided()
     {
         // Arrange
-        var hospital = new Hospital(
-            "Test Hospital",
-            new LandlineNumber("(54) 1234-5678"),
-            new Address("Test Street", "123", "Test Neighborhood", "Test City", "Test State", "98765-432"));
-
-        var newName = "Updated Hospital";
-        var newLandlineNumber = new LandlineNumber("(54) 8765-4321");
-        var newAddress = new Address("Updated Street", "456", "Updated Neighborhood", "Updated City", "Updated State", "12345-678");
+        var hospital = new HospitalFaker().Generate();
+        var updatedName = "Updated Hospital";
+        var updatedLandlineNumber = new LandlineNumber("(54) 8765-4321");
+        var updatedAddress = new Address("Updated Street", "456", "Updated Neighborhood", "Updated City", "Updated State", "12345-678");
 
         // Act
-        hospital.Update(newName, newLandlineNumber, newAddress);
+        hospital.Update(updatedName, updatedLandlineNumber, updatedAddress);
 
         // Assert
-        hospital.Name.Should().Be(newName);
-        hospital.LandlineNumber.Should().Be(newLandlineNumber);
-        hospital.Address.Should().Be(newAddress);
+        hospital.Name.Should().Be(updatedName);
+        hospital.LandlineNumber.Should().Be(updatedLandlineNumber);
+        hospital.Address.Should().Be(updatedAddress);
     }
 }
