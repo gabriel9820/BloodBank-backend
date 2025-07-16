@@ -12,7 +12,7 @@ public class Hospital(
     public Address Address { get; private set; } = address;
 
     /* Navigation Properties */
-    public IEnumerable<BloodTransfer> BloodTransfers { get; private set; } = [];
+    public IEnumerable<BloodTransfer> BloodTransfers { get; private set; } = new List<BloodTransfer>();
 
     protected Hospital() : this(default!, default!, default!) { }
 

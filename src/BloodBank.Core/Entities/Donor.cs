@@ -26,7 +26,7 @@ public class Donor(
     public Address Address { get; private set; } = address;
 
     /* Navigation Properties */
-    public IEnumerable<Donation> Donations { get; private set; } = [];
+    public IEnumerable<Donation> Donations { get; private set; } = new List<Donation>();
 
     protected Donor() : this(default!, default!, default!, default, default, default, default, default, default!) { }
 
