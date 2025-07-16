@@ -7,4 +7,5 @@ public static class DonorErrors
     public static readonly Error CellPhoneNumberAlreadyInUse = new(HttpStatusCode.BadRequest, "O número de celular informado já está em uso.");
     public static readonly Error EmailAlreadyInUse = new(HttpStatusCode.BadRequest, "O e-mail informado já está em uso.");
     public static readonly Error DonorNotFound = new(HttpStatusCode.NotFound, "Doador não encontrado.");
+    public static readonly Error DonorCannotDonate = new(HttpStatusCode.BadRequest, "Doador não está elegível para doação.");
 }

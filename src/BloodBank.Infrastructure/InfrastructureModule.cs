@@ -38,6 +38,8 @@ public static class InfrastructureModule
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IDonorRepository, DonorRepository>();
         services.AddScoped<IHospitalRepository, HospitalRepository>();
+        services.AddScoped<IDonationRepository, DonationRepository>();
+        services.AddScoped<IStockRepository, StockRepository>();
 
         return services;
     }
