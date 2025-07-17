@@ -25,7 +25,9 @@ public class DonationRepository(
     {
         var query = _dbContext.Donations.AsNoTracking();
 
-        query = query.OrderByDescending(x => x.DonationDate);
+        query = query
+            .Include(d => d.Donor)
+            .OrderByDescending(x => x.DonationDate);
 
         return await query.ToPagedResultAsync(request.PageNumber, request.PageSize);
     }

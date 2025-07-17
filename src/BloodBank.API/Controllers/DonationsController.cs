@@ -1,5 +1,6 @@
 using BloodBank.Application.Commands.AddDonation;
 using BloodBank.Application.Commands.DeleteDonation;
+using BloodBank.Application.Queries.GetAllDonations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,19 @@ public class DonationsController(
     IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] GetAllDonationsQuery query)
+    {
+        var result = await _mediator.Send(query);
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return Ok(result.Data);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Add(AddDonationCommand command)
