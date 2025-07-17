@@ -1,3 +1,4 @@
+using BloodBank.Core.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +11,26 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        var problemDetails = new ProblemDetails
+        ProblemDetails problemDetails;
+
+        if (exception is DomainException domainException)
         {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "Server Error"
-        };
+            problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = domainException.Message
+            };
+        }
+        else
+        {
+            problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "Server Error"
+            };
+        }
 
         httpContext.Response.StatusCode = problemDetails.Status.Value;
-
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
