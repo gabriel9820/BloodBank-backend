@@ -30,6 +30,13 @@ public class DonationRepository(
         return await query.ToPagedResultAsync(request.PageNumber, request.PageSize);
     }
 
+    public async Task<Donation?> GetByIdAsync(int id)
+    {
+        return await _dbContext.Donations
+            .Include(d => d.Donor)
+            .SingleOrDefaultAsync(d => d.Id == id);
+    }
+
     public async Task<DateTime?> GetLastDonationDateByDonorIdAsync(int donorId)
     {
         return await _dbContext.Donations

@@ -1,4 +1,5 @@
 using BloodBank.Application.Commands.AddDonation;
+using BloodBank.Application.Commands.DeleteDonation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,5 +25,18 @@ public class DonationsController(
         }
 
         return Created();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await _mediator.Send(new DeleteDonationCommand(id));
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return NoContent();
     }
 }

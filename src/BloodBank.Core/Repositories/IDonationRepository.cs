@@ -8,5 +8,6 @@ public interface IDonationRepository
     Task AddAsync(Donation donation);
     void Delete(Donation donation);
     Task<PagedResult<Donation>> GetAllAsync(DonationPagedRequest request);
+    Task<Donation?> GetByIdAsync(int id);
     Task<DateTime?> GetLastDonationDateByDonorIdAsync(int donorId);
 }
