@@ -2,21 +2,31 @@ using BloodBank.Core.ValueObjects;
 
 namespace BloodBank.Core.Entities;
 
-public class User(
-    string fullName,
-    CellPhoneNumber cellPhoneNumber,
-    Email email,
-    string passwordHash,
-    string role) : BaseEntity
+public class User : BaseEntity
 {
-    public string FullName { get; private set; } = fullName;
-    public CellPhoneNumber CellPhoneNumber { get; private set; } = cellPhoneNumber;
-    public Email Email { get; private set; } = email;
-    public string PasswordHash { get; private set; } = passwordHash;
-    public string Role { get; private set; } = role;
-    public bool IsActive { get; private set; } = true;
+    public string FullName { get; private set; }
+    public CellPhoneNumber CellPhoneNumber { get; private set; }
+    public Email Email { get; private set; }
+    public string PasswordHash { get; private set; }
+    public string Role { get; private set; }
+    public bool IsActive { get; private set; }
 
-    protected User() : this(default!, default!, default!, default!, default!) { }
+    protected User() { }
+
+    public User(
+        string fullName,
+        CellPhoneNumber cellPhoneNumber,
+        Email email,
+        string passwordHash,
+        string role)
+    {
+        FullName = fullName;
+        CellPhoneNumber = cellPhoneNumber;
+        Email = email;
+        PasswordHash = passwordHash;
+        Role = role;
+        IsActive = true;
+    }
 
     public void Update(
         string fullName,

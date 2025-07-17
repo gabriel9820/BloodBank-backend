@@ -3,23 +3,33 @@ using BloodBank.Core.Exceptions;
 
 namespace BloodBank.Core.Entities;
 
-public class BloodTransfer(
-    DateTime transferDate,
-    BloodType bloodType,
-    RhFactor rhFactor,
-    int quantityML,
-    Hospital hospital) : BaseEntity
+public class BloodTransfer : BaseEntity
 {
-    public DateTime TransferDate { get; private set; } = ValidateTransferDate(transferDate);
-    public BloodType BloodType { get; private set; } = bloodType;
-    public RhFactor RhFactor { get; private set; } = rhFactor;
-    public int QuantityML { get; private set; } = ValidateQuantity(quantityML);
+    public DateTime TransferDate { get; private set; }
+    public BloodType BloodType { get; private set; }
+    public RhFactor RhFactor { get; private set; }
+    public int QuantityML { get; private set; }
 
     /* Foreign Keys */
-    public Hospital Hospital { get; private set; } = hospital;
-    public int HospitalId { get; private set; } = hospital.Id;
+    public Hospital Hospital { get; private set; }
+    public int HospitalId { get; private set; }
 
-    protected BloodTransfer() : this(default, default, default, default, default!) { }
+    protected BloodTransfer() { }
+
+    public BloodTransfer(
+        DateTime transferDate,
+        BloodType bloodType,
+        RhFactor rhFactor,
+        int quantityML,
+        Hospital hospital)
+    {
+        TransferDate = ValidateTransferDate(transferDate);
+        BloodType = bloodType;
+        RhFactor = rhFactor;
+        QuantityML = ValidateQuantity(quantityML);
+        Hospital = hospital;
+        HospitalId = hospital.Id;
+    }
 
     private static DateTime ValidateTransferDate(DateTime transferDate)
     {

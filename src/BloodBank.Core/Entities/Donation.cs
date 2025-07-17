@@ -3,19 +3,24 @@ using BloodBank.Core.Exceptions;
 
 namespace BloodBank.Core.Entities;
 
-public class Donation(
-    DateTime donationDate,
-    int quantityML,
-    Donor donor) : BaseEntity
+public class Donation : BaseEntity
 {
-    public DateTime DonationDate { get; private set; } = ValidateDonationDate(donationDate);
-    public int QuantityML { get; private set; } = ValidateQuantity(quantityML);
+    public DateTime DonationDate { get; private set; }
+    public int QuantityML { get; private set; }
 
     /* Foreign Keys */
-    public Donor Donor { get; private set; } = donor;
-    public int DonorId { get; private set; } = donor.Id;
+    public Donor Donor { get; private set; }
+    public int DonorId { get; private set; }
 
-    protected Donation() : this(default, default, default!) { }
+    protected Donation() { }
+
+    public Donation(DateTime donationDate, int quantityML, Donor donor)
+    {
+        DonationDate = ValidateDonationDate(donationDate);
+        QuantityML = ValidateQuantity(quantityML);
+        Donor = donor;
+        DonorId = donor.Id;
+    }
 
     private static DateTime ValidateDonationDate(DateTime donationDate)
     {

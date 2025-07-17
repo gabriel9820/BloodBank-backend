@@ -3,16 +3,20 @@ using BloodBank.Core.Exceptions;
 
 namespace BloodBank.Core.Entities;
 
-public class Stock(
-    BloodType bloodType,
-    RhFactor rhFactor,
-    int quantityML) : BaseEntity
+public class Stock : BaseEntity
 {
-    public BloodType BloodType { get; private set; } = bloodType;
-    public RhFactor RhFactor { get; private set; } = rhFactor;
-    public int QuantityML { get; private set; } = ValidateInitialQuantity(quantityML);
+    public BloodType BloodType { get; private set; }
+    public RhFactor RhFactor { get; private set; }
+    public int QuantityML { get; private set; }
 
-    protected Stock() : this(default, default, default) { }
+    protected Stock() { }
+
+    public Stock(BloodType bloodType, RhFactor rhFactor, int quantityML)
+    {
+        BloodType = bloodType;
+        RhFactor = rhFactor;
+        QuantityML = ValidateInitialQuantity(quantityML);
+    }
 
     private static int ValidateInitialQuantity(int quantityML)
     {
