@@ -5,7 +5,7 @@ namespace BloodBank.UnitTests.Fakers;
 
 public class AddBloodTransferCommandFaker : Faker<AddBloodTransferCommand>
 {
-    public AddBloodTransferCommandFaker()
+    public AddBloodTransferCommandFaker() : base("pt_BR")
     {
         RuleFor(x => x.TransferDate, f => f.Date.Recent(1, DateTime.UtcNow));
         RuleFor(x => x.BloodType, f => f.PickRandom<BloodType>());
