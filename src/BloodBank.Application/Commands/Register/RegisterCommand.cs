@@ -12,6 +12,7 @@ public class RegisterCommand : IRequest<Result<int>>
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
+    public bool IsLowStockNotificationEnabled { get; set; }
 }
 
 public static class RegisterCommandExtensions
@@ -23,7 +24,8 @@ public static class RegisterCommandExtensions
             cellPhoneNumber: new CellPhoneNumber(command.CellPhoneNumber),
             email: new Email(command.Email),
             passwordHash: passwordHash,
-            role: command.Role
+            role: command.Role,
+            isLowStockNotificationEnabled: command.IsLowStockNotificationEnabled
         );
     }
 }

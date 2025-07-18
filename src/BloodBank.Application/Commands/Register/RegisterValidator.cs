@@ -28,5 +28,8 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Role)
             .NotEmpty().WithMessage("Perfil do usuário é obrigatório.")
             .Must(UserRoles.IsValid).WithMessage($"Perfil do usuário não é válido.");
+
+        RuleFor(x => x.IsLowStockNotificationEnabled)
+            .NotNull().WithMessage("Notificação de estoque baixo é obrigatória.");
     }
 }

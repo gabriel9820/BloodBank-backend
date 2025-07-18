@@ -13,7 +13,8 @@ public class UserFaker : Faker<User>
             new CellPhoneNumber(f.Phone.PhoneNumber("(##) 9####-####")),
             new Email(f.Internet.Email()),
             f.Internet.Password(),
-            f.PickRandom(UserRoles.Admin, UserRoles.Operator)
+            f.PickRandom(UserRoles.Admin, UserRoles.Operator),
+            f.Random.Bool()
         ));
 
         RuleFor(u => u.Id, f => f.Random.Int(1, 1000));

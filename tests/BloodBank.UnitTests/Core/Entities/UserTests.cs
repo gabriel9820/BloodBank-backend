@@ -16,9 +16,10 @@ public class UserTests
         var email = new Email("testuser@example.com");
         var passwordHash = "hashedpassword";
         var role = UserRoles.Admin;
+        var isLowStockNotificationEnabled = true;
 
         // Act
-        var user = new User(fullName, cellPhoneNumber, email, passwordHash, role);
+        var user = new User(fullName, cellPhoneNumber, email, passwordHash, role, isLowStockNotificationEnabled);
 
         // Assert
         user.FullName.Should().Be(fullName);
@@ -26,6 +27,7 @@ public class UserTests
         user.Email.Should().Be(email);
         user.PasswordHash.Should().Be(passwordHash);
         user.Role.Should().Be(role);
+        user.IsLowStockNotificationEnabled.Should().Be(isLowStockNotificationEnabled);
     }
 
     [Fact]
@@ -38,15 +40,17 @@ public class UserTests
         var updatedCellPhoneNumber = new CellPhoneNumber("(54) 98765-4321");
         var updatedRole = UserRoles.Operator; ;
         var updatedIsActive = false;
+        var updatedIsLowStockNotificationEnabled = false;
 
         // Act
-        user.Update(updatedFullName, updatedCellPhoneNumber, updatedRole, updatedIsActive);
+        user.Update(updatedFullName, updatedCellPhoneNumber, updatedRole, updatedIsActive, updatedIsLowStockNotificationEnabled);
 
         // Assert
         user.FullName.Should().Be(updatedFullName);
         user.CellPhoneNumber.Should().Be(updatedCellPhoneNumber);
         user.Role.Should().Be(updatedRole);
         user.IsActive.Should().Be(updatedIsActive);
+        user.IsLowStockNotificationEnabled.Should().Be(updatedIsLowStockNotificationEnabled);
     }
 
     [Fact]
