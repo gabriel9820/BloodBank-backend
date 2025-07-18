@@ -7,4 +7,14 @@ public abstract class BaseEntity
     public DateTime UpdatedAt { get; protected set; }
 
     protected BaseEntity() { }
+
+    public void SetCreatedAt(DateTime createdAt)
+    {
+        CreatedAt = createdAt;
+    }
+
+    public void SetUpdatedAt(DateTime updatedAt)
+    {
+        UpdatedAt = updatedAt;
+    }
 }
