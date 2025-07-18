@@ -1,5 +1,6 @@
 using BloodBank.Application.Commands.AddBloodTransfer;
 using BloodBank.Application.Commands.DeleteBloodTransfer;
+using BloodBank.Application.Queries.GetAllBloodTransfers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,19 @@ public class BloodTransfersController(
     IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] GetAllBloodTransfersQuery query)
+    {
+        var result = await _mediator.Send(query);
+
+        if (!result.IsSuccess)
+        {
+            return StatusCode(result.Error.Code, result.Error.Message);
+        }
+
+        return Ok(result.Data);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Add(AddBloodTransferCommand command)
