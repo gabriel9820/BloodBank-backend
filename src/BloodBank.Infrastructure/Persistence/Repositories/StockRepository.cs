@@ -15,6 +15,15 @@ public class StockRepository(
         await _dbContext.Stocks.AddAsync(stock);
     }
 
+    public async Task<IEnumerable<Stock>> GetAllAsync()
+    {
+        return await _dbContext.Stocks
+            .AsNoTracking()
+            .OrderBy(s => s.BloodType)
+            .ThenBy(s => s.RhFactor)
+            .ToListAsync();
+    }
+
     public async Task<Stock?> GetByBloodTypeAsync(BloodType bloodType, RhFactor rhFactor)
     {
         return await _dbContext.Stocks
