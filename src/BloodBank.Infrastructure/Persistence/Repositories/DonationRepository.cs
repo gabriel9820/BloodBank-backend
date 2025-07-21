@@ -25,6 +25,9 @@ public class DonationRepository(
     {
         var query = _dbContext.Donations.AsNoTracking();
 
+        if (request.DonorId.HasValue)
+            query = query.Where(d => d.DonorId == request.DonorId.Value);
+
         query = query
             .Include(d => d.Donor)
             .OrderByDescending(x => x.DonationDate);
