@@ -1,4 +1,4 @@
-namespace BloodBank.Application.DTOs;
+namespace BloodBank.Infrastructure.Models;
 
 public class StockConfig
 {

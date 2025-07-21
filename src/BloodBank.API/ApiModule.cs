@@ -9,16 +9,8 @@ public static class ApiModule
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .LoadConfiguration(configuration)
             .AddSwagger()
             .AddExceptionHandler();
-
-        return services;
-    }
-
-    public static IServiceCollection LoadConfiguration(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<StockConfig>(configuration.GetSection("StockConfig"));
 
         return services;
     }

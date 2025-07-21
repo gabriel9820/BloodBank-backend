@@ -2,6 +2,7 @@
 using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
 using BloodBank.Infrastructure.Auth;
+using BloodBank.Infrastructure.Models;
 using BloodBank.Infrastructure.Persistence;
 using BloodBank.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Extensions.DependencyInjection;
 
 namespace BloodBank.Infrastructure;
 
@@ -18,9 +20,19 @@ public static class InfrastructureModule
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services
+            .LoadConfiguration(configuration)
             .AddBloodBankDbContext(configuration)
             .AddRepositories()
-            .AddAuthentication(configuration);
+            .AddAuthentication(configuration)
+            .AddEmailService(configuration);
+
+        return services;
+    }
+
+    public static IServiceCollection LoadConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<StockConfig>(configuration.GetSection("StockConfig"));
+        services.Configure<SendGridConfig>(configuration.GetSection("SendGridConfig"));
 
         return services;
     }
@@ -78,6 +90,17 @@ public static class InfrastructureModule
                     }
                 };
             });
+
+        return services;
+    }
+
+    private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
+    {
+        // services.AddScoped<IEmailService, EmailService>();
+        services.AddSendGrid(options =>
+        {
+            options.ApiKey = configuration["SendGrid:ApiKey"];
+        });
 
         return services;
     }
