@@ -1,4 +1,5 @@
 using BloodBank.Core.Entities;
+using BloodBank.Core.Models;
 using BloodBank.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,15 @@ public class UserRepository(
     public async Task<User?> GetByEmailAsync(string email)
     {
         return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email.Value == email);
+    }
+
+    public async Task<IEnumerable<UserNotificationDTO>> GetUsersToNotifyLowStockAsync()
+    {
+        return await _dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.IsActive && u.IsLowStockNotificationEnabled)
+            .Select(u => new UserNotificationDTO { Id = u.Id, Email = u.Email.Value })
+            .ToListAsync();
     }
 
     public async Task<bool> IsCellPhoneNumberInUseAsync(string cellPhoneNumber)
