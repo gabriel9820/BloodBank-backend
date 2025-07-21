@@ -1,3 +1,4 @@
+using BloodBank.Core.DomainEvents;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.Exceptions;
@@ -119,5 +120,28 @@ public class StockTests
 
         // Assert
         act.Should().Throw<InsufficientStockException>();
+    }
+
+    [Fact]
+    public void RemoveFromStock_ShouldAddLowStockDomainEvent_WhenQuantityIsBelowThreshold()
+    {
+        // Arrange
+        var stock = new StockFaker()
+            .RuleFor(s => s.QuantityML, 1500)
+            .Generate();
+        var removeQuantity = 600;
+        var lowStockThreshold = 1000;
+        var expectedQuantity = stock.QuantityML - removeQuantity;
+        
+        // Act
+        stock.RemoveFromStock(removeQuantity, lowStockThreshold);
+
+        // Assert
+        Assert.Contains(stock.DomainEvents, e =>
+            e is LowStockDomainEvent evt &&
+            evt.BloodType == stock.BloodType &&
+            evt.RhFactor == stock.RhFactor &&
+            evt.QuantityML == expectedQuantity
+        );
     }
 }
