@@ -1,6 +1,8 @@
 using BloodBank.Application.Results;
 using BloodBank.Core.Repositories;
+using BloodBank.Infrastructure.Models;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace BloodBank.Application.Commands.AddBloodTransfer;
 
@@ -8,12 +10,14 @@ public class AddBloodTransferHandler(
     IBloodTransferRepository bloodTransferRepository,
     IHospitalRepository hospitalRepository,
     IStockRepository stockRepository,
-    IUnitOfWork unitOfWork) : IRequestHandler<AddBloodTransferCommand, Result<int>>
+    IUnitOfWork unitOfWork,
+    IOptions<StockConfig> stockConfig) : IRequestHandler<AddBloodTransferCommand, Result<int>>
 {
     private readonly IBloodTransferRepository _bloodTransferRepository = bloodTransferRepository;
     private readonly IHospitalRepository _hospitalRepository = hospitalRepository;
     private readonly IStockRepository _stockRepository = stockRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly StockConfig _stockConfig = stockConfig.Value;
 
     public async Task<Result<int>> Handle(AddBloodTransferCommand request, CancellationToken cancellationToken)
     {
@@ -29,7 +33,7 @@ public class AddBloodTransferHandler(
         if (stock is null || stock.QuantityML < bloodTransfer.QuantityML)
             return StockErrors.InsufficientStock;
 
-        stock.RemoveFromStock(bloodTransfer.QuantityML);
+        stock.RemoveFromStock(bloodTransfer.QuantityML, _stockConfig.Minimum);
 
         await _bloodTransferRepository.AddAsync(bloodTransfer);
         await _unitOfWork.SaveChangesAsync();
