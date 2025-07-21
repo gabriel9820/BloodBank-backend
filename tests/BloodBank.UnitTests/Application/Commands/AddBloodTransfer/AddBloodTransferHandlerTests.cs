@@ -2,7 +2,9 @@ using BloodBank.Application.Commands.AddBloodTransfer;
 using BloodBank.Application.Results;
 using BloodBank.Core.Entities;
 using BloodBank.Core.Repositories;
+using BloodBank.Infrastructure.Models;
 using BloodBank.UnitTests.Fakers;
+using Microsoft.Extensions.Options;
 
 namespace BloodBank.UnitTests.Application.Commands.AddBloodTransfer;
 
@@ -12,6 +14,7 @@ public class AddBloodTransferHandlerTests
     private readonly Mock<IHospitalRepository> _hospitalRepositoryMock;
     private readonly Mock<IStockRepository> _stockRepositoryMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<IOptions<StockConfig>> _stockConfigMock;
     private readonly AddBloodTransferHandler _handler;
 
     public AddBloodTransferHandlerTests()
@@ -20,11 +23,14 @@ public class AddBloodTransferHandlerTests
         _hospitalRepositoryMock = new Mock<IHospitalRepository>();
         _stockRepositoryMock = new Mock<IStockRepository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _stockConfigMock = new Mock<IOptions<StockConfig>>();
+        _stockConfigMock.Setup(config => config.Value).Returns(new StockConfig { Minimum = 8400 });
         _handler = new AddBloodTransferHandler(
             _bloodTransferRepositoryMock.Object,
             _hospitalRepositoryMock.Object,
             _stockRepositoryMock.Object,
-            _unitOfWorkMock.Object);
+            _unitOfWorkMock.Object,
+            _stockConfigMock.Object);
     }
 
     [Fact]
