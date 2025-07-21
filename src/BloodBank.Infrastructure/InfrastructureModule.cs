@@ -5,6 +5,7 @@ using BloodBank.Infrastructure.Auth;
 using BloodBank.Infrastructure.Models;
 using BloodBank.Infrastructure.Persistence;
 using BloodBank.Infrastructure.Persistence.Repositories;
+using BloodBank.Infrastructure.Services.Email;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -96,10 +97,10 @@ public static class InfrastructureModule
 
     private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailService, EmailService>();
         services.AddSendGrid(options =>
         {
-            options.ApiKey = configuration["SendGrid:ApiKey"];
+            options.ApiKey = configuration["SendGridConfig:ApiKey"];
         });
 
         return services;
