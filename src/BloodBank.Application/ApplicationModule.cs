@@ -1,4 +1,6 @@
 ﻿using BloodBank.Application.Commands.Register;
+using BloodBank.Application.Events;
+using BloodBank.Core.DomainEvents;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -11,7 +13,8 @@ public static class ApplicationModule
     {
         services
             .AddMediatR()
-            .AddFluentValidation();
+            .AddFluentValidation()
+            .AddDomainEventDispatcher();
 
         return services;
     }
@@ -31,4 +34,12 @@ public static class ApplicationModule
 
         return services;
     }
+
+    private static IServiceCollection AddDomainEventDispatcher(this IServiceCollection services)
+    {
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
+        return services;
+    }
+
 }

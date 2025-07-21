@@ -1,3 +1,4 @@
+using BloodBank.Core.DomainEvents;
 using BloodBank.Core.Enums;
 using BloodBank.Core.Exceptions;
 
@@ -34,7 +35,7 @@ public class Stock : BaseEntity
         QuantityML += quantityML;
     }
 
-    public void RemoveFromStock(int quantityML)
+    public void RemoveFromStock(int quantityML, int? lowStockThresholdML = null)
     {
         if (quantityML <= 0)
             throw new InvalidQuantityException();
@@ -43,5 +44,10 @@ public class Stock : BaseEntity
             throw new InsufficientStockException();
 
         QuantityML -= quantityML;
+
+        if (lowStockThresholdML.HasValue && QuantityML < lowStockThresholdML.Value)
+        {
+            AddDomainEvent(new LowStockDomainEvent(BloodType, RhFactor, QuantityML));
+        }
     }
 }
