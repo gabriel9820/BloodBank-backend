@@ -20,9 +20,10 @@ public class LoginHandler(
         if (user is null || !user.IsActive || !_authService.VerifyPassword(request.Password, user.PasswordHash))
             return UserErrors.InvalidCredentials;
 
+        var authUser = new AuthUserViewModel(user.FullName, user.Email.Value, user.Role);
         var accessToken = _authService.GenerateJwtToken(user.Id.ToString(), user.Email.Value, user.Role);
         var refreshToken = _authService.GenerateRefreshToken();
 
-        return new LoginViewModel(accessToken, refreshToken);
+        return new LoginViewModel(authUser, accessToken, refreshToken);
     }
 }

@@ -28,7 +28,7 @@ public class AuthController(
 
         SetTokensInCookies(result.Data!);
 
-        return NoContent();
+        return Ok(result.Data?.User);
     }
 
     [HttpPost("register")]
@@ -54,7 +54,7 @@ public class AuthController(
         return NoContent();
     }
 
-    private void SetTokensInCookies(LoginViewModel tokens)
+    private void SetTokensInCookies(LoginViewModel model)
     {
         var options = new CookieOptions()
         {
@@ -64,7 +64,7 @@ public class AuthController(
             Expires = DateTime.UtcNow.AddMonths(3)
         };
 
-        Response.Cookies.Append("X-Access-Token", tokens.AccessToken, options);
-        Response.Cookies.Append("X-Refresh-Token", tokens.RefreshToken, options);
+        Response.Cookies.Append("X-Access-Token", model.AccessToken, options);
+        Response.Cookies.Append("X-Refresh-Token", model.RefreshToken, options);
     }
 }
