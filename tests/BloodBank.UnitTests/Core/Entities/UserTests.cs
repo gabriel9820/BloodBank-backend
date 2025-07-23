@@ -38,7 +38,7 @@ public class UserTests
 
         var updatedFullName = "Updated User";
         var updatedCellPhoneNumber = new CellPhoneNumber("(54) 98765-4321");
-        var updatedRole = UserRoles.Operator; ;
+        var updatedRole = UserRoles.Operator;
         var updatedIsActive = false;
         var updatedIsLowStockNotificationEnabled = false;
 

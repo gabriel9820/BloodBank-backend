@@ -1,4 +1,5 @@
 using BloodBank.Application.Commands.Login;
+using BloodBank.Application.DTOs.ViewModels;
 using BloodBank.Application.Results;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.ValueObjects;
@@ -31,6 +32,7 @@ public class LoginHandlerTests
             .Generate();
         var expectedAccessToken = "access-token";
         var expectedRefreshToken = "refresh-token";
+        var expectedAuthUser = new AuthUserViewModel(expectedUser.FullName, expectedUser.Email.Value, expectedUser.Role);
 
         _userRepositoryMock.Setup(ur => ur.GetByEmailAsync(command.Email)).ReturnsAsync(expectedUser);
         _authServiceMock.Setup(a => a.VerifyPassword(command.Password, expectedUser.PasswordHash)).Returns(true);
@@ -45,6 +47,7 @@ public class LoginHandlerTests
         result.Data.Should().NotBeNull();
         result.Data.AccessToken.Should().Be(expectedAccessToken);
         result.Data.RefreshToken.Should().Be(expectedRefreshToken);
+        result.Data.User.Should().BeEquivalentTo(expectedAuthUser);
 
         _userRepositoryMock.Verify(ur => ur.GetByEmailAsync(command.Email), Times.Once);
         _authServiceMock.Verify(a => a.VerifyPassword(command.Password, expectedUser.PasswordHash), Times.Once);
@@ -56,7 +59,7 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnError_WhenUserNotFound()
     {
         // Arrange
-        var command = new LoginCommandFaker().Generate();;
+        var command = new LoginCommandFaker().Generate();
 
         _userRepositoryMock.Setup(ur => ur.GetByEmailAsync(command.Email)).ReturnsAsync(() => null);
 
@@ -77,7 +80,7 @@ public class LoginHandlerTests
     public async Task Handle_ShouldReturnError_WhenUserIsNotActive()
     {
         // Arrange
-        var command = new LoginCommandFaker().Generate();;
+        var command = new LoginCommandFaker().Generate();
         var expectedUser = new UserFaker()
             .RuleFor(u => u.Email, new Email(command.Email))
             .Generate();
@@ -104,7 +107,7 @@ public class LoginHandlerTests
         // Arrange
         var command = new LoginCommandFaker()
             .RuleFor(c => c.Password, "wrong-password")
-            .Generate();;
+            .Generate();
         var expectedUser = new UserFaker()
             .RuleFor(u => u.Email, new Email(command.Email))
             .Generate();
